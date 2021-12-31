@@ -1,12 +1,11 @@
 {
-  "name": "gatsby-starter-lavender",
-  "private": true,
+  "name": "keisluvlog",
   "description": "purple flavored blog starter based on Gatsby",
   "version": "1.0.0",
-  "author": "Changhui Lee <iam@xo.dev>",
+  "author": "KeisLuv5991",
   "scripts": {
-    "build": "gatsby build",
-    "dev": "gatsby develop",
+    "build": "gatsby clean && gatsby build",
+    "dev": "gatsby clean && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "lint:fix": "eslint --fix src",
@@ -14,15 +13,9 @@
     "typecheck": "tsc --noEmit --skipLibCheck",
     "prepare": "husky install"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/blurfx/gatsby-starter-lavender.git"
-  },
-  "bugs": {
-    "url": "https://github.com/blurfx/gatsby-starter-lavender/issues"
-  },
   "dependencies": {
-    "@stitches/react": "^0.2.3",
+    "@fontsource/ubuntu": "^4.5.0",
+    "@stitches/react": "^1.2.6",
     "disqus-react": "^1.1.1",
     "gatsby": "^3.10.2",
     "gatsby-plugin-feed": "^3.10.0",
@@ -70,14 +63,6 @@
     "lint-staged": "^11.0.0",
     "typescript": "^4.3.2"
   },
-  "homepage": "https://github.com/blurfx/gatsby-starter-lavender#readme",
-  "keywords": [
-    "gatsby",
-    "gatsby-starter",
-    "blog",
-    "template",
-    "markdown"
-  ],
   "license": "0BSD",
   "main": "n/a"
 }

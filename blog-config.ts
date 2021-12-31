@@ -1,21 +1,21 @@
 const config = {
-  title: 'Lavender Blog',     // Blog name
-  author: 'Hubert Selby Jr.', // Your name
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  siteUrl: 'https://gatsby-starter-lavender.vercel.app',
+  title: 'KeisLuvlog',     // Blog name
+  author: 'KeisLuv5991.', // Your name
+  description: 'What is Real?  How do you define Real?  I`ve been lived in the dream world..',
+  siteUrl: 'https://keisluvlog.netlify.app',
   thumbnail: '/thumbnails/main.png',  // Default blog thumbnail. i.e. '/thumbnails/main.png'
   social: {
-    github: 'blurfx',   // GitHub username
+    github: 'keisluv5991',   // GitHub username
     twitter: '',        // Twitter username
     facebook: '',       // Facebook username
     linkedin: '',       // LinkedIn username
     instagram: '',      // Instagram username
   },
   comment: {
-    utterances: 'blurfx/gatsby-starter-lavender', // Your GitHub repository
+    utterances: 'keisluv5991/keisluvlog', // Your GitHub repository
     disqusShortName: '',  // Disqus short name
   },
-  icon: 'src/images/gatsby-icon.png', // path of blog icon
+  icon: 'src/images/favicon.png', // path of blog icon
   googleAnalytics: '0',  // Google Analytics tracking id
 };
 

@@ -1,6 +1,6 @@
-import { createCss } from '@stitches/react';
+import { createStitches } from '@stitches/react';
 
-export const { styled, css, getCssString, theme, global } = createCss({
+export const { styled, css, getCssText, createTheme, globalCss } = createStitches({
   prefix: '',
   theme: {
     colors: {
@@ -16,11 +16,11 @@ export const { styled, css, getCssString, theme, global } = createCss({
       yellow: '#ffd75e',
       yellowAccent: '#ffa659',
 
-      primary100: '#edeafc',
-      primary200: '#bcb2f5',
-      primary300: '#816eec',
-      primary400: '#3b1de2',
-      primary500: '#24128a',
+      primary100: '#9ef7ac',
+      primary200: '#36e351',
+      primary300: '#1ab532',
+      primary400: '#109c25',
+      primary500: '#086e17',
 
       text100: '$gray300',
       text200: '$gray400',
@@ -63,7 +63,7 @@ export const { styled, css, getCssString, theme, global } = createCss({
 });
 
 
-export const darkTheme = theme('dark-theme', {
+export const darkTheme = createTheme('dark-theme', {
   colors: {
     gray100: '#303136',
     gray200: '#3d4144',
@@ -74,11 +74,11 @@ export const darkTheme = theme('dark-theme', {
     gray700: '#f6f1ea',
     black: '#222425',
 
-    primary100: '#edeafc',
-    primary200: '#b9acff',
-    primary300: '#816eec',
-    primary400: '#3b1de2',
-    primary500: '#221182',
+    primary100: '#9ef7ac',
+    primary200: '#36e351',
+    primary300: '#1ab532',
+    primary400: '#109c25',
+    primary500: '#086e17',
 
     text100: '$gray300',
     text200: '$gray400',
@@ -97,6 +97,6 @@ export const darkTheme = theme('dark-theme', {
     tagColor: '$primary400',
     tagFilterBackground: '$primary100',
 
-    headerCircleColor: '$gray200',
+    headerCircleColor: '#109c25',
   },
 });
