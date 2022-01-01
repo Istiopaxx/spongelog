@@ -62,8 +62,8 @@ export const Content = styled('section', {
   wordBreak: 'keep-all',
 
   h1: {
-    marginTop: '2rem',
-    marginBottom: '1.25rem',
+    marginTop: '4rem',
+    marginBottom: '1.5rem',
     paddingBottom: '0.25rem',
     borderBottom: '1px solid $borderGray',
 
@@ -72,14 +72,17 @@ export const Content = styled('section', {
     }
   },
   h2: {
-    marginTop: '1.5rem',
-    marginBottom: '1rem',
+    marginTop: '4rem',
+    marginBottom: '0.5rem',
     paddingBottom: '0.25rem',
-    borderBottom: '1px solid $borderGray',
+    // borderBottom: '1px solid $borderGray',
 
     a: {
       borderBottom: 'none',
     }
+  },
+  h3: {
+    marginTop: '3rem',
   },
   a: {
     borderBottom: '1px solid $borderPrimary',
