@@ -72,7 +72,7 @@ export const Content = styled('section', {
     }
   },
   h2: {
-    marginTop: '4rem',
+    marginTop: '3rem',
     marginBottom: '0.5rem',
     paddingBottom: '0.25rem',
     // borderBottom: '1px solid $borderGray',

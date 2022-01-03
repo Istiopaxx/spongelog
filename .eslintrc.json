@@ -76,7 +76,7 @@
     "keyword-spacing": "error",
     "quotes": [
       "error",
-      "double"
+      "single"
     ],
     "react/jsx-filename-extension": [
       "warn",
