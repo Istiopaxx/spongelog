@@ -16,7 +16,7 @@ const config = {
     disqusShortName: '',  // Disqus short name
   },
   icon: 'src/images/favicon.png', // path of blog icon
-  googleAnalytics: '0',  // Google Analytics tracking id
+  googleAnalytics: 'G-DY6PQQ104H',  // Google Analytics tracking id
 };
 
 export default config;
