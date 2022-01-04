@@ -1,6 +1,6 @@
 ---
 title: UNIX 시스템 개요 1.
-date: 2021-12-31
+date: 2021-01-03
 tags: [UNIX, UNIX_Programming]
 description: UNIX 시스템을 전반적으로 설명합니다. 1편 - 사용자 식별/파일 시스템/입출력/시간 처리
 ---
@@ -258,7 +258,7 @@ CPU Time이라고도 부르는 프로세스 시간은 프로세스가 사용한 
 
 # Finish
 
-[다음 포스트]()에서 이번 포스트에서 다루지 못한 나머지 UNIX 특성을 대략적으로 다뤄보도록 하겠습니다.
+[다음 포스트](https://keisluvlog.netlify.app/UNIX_system_outline_2/)에서 이번 포스트에서 다루지 못한 나머지 UNIX 특성을 대략적으로 다뤄보도록 하겠습니다.
 UNIX_Programming 포스트 시리즈는 각 주제에 대해 더 자세히 다루는 포스팅이 계속 있을 예정입니다.
 
 ## References
