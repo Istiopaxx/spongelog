@@ -4,14 +4,15 @@
   "version": "1.0.0",
   "author": "KeisLuv5991",
   "scripts": {
-    "build": "gatsby clean && gatsby build",
+    "build": "gatsby clean && gatsby build && yarn copy",
     "dev": "gatsby clean && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "lint:fix": "eslint --fix src",
     "lint-staged": "lint-staged",
     "typecheck": "tsc --noEmit --skipLibCheck",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "copy": "cp googlee7a14b72855bd0b9.html public/"
   },
   "dependencies": {
     "@fontsource/ubuntu": "^4.5.0",
