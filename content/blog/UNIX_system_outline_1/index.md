@@ -1,6 +1,6 @@
 ---
 title: UNIX 시스템 개요 1.
-date: 2021-01-03
+date: 2022-01-03
 tags: [UNIX, UNIX_Programming]
 description: UNIX 시스템을 전반적으로 설명합니다. 1편 - 사용자 식별/파일 시스템/입출력/시간 처리
 ---
