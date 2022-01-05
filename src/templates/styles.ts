@@ -69,7 +69,7 @@ export const Content = styled('section', {
 
     a: {
       borderBottom: 'none',
-    }
+    },
   },
   h2: {
     marginTop: '3rem',
@@ -79,7 +79,7 @@ export const Content = styled('section', {
 
     a: {
       borderBottom: 'none',
-    }
+    },
   },
   h3: {
     marginTop: '3rem',
@@ -89,7 +89,8 @@ export const Content = styled('section', {
 
     color: '$link',
 
-    transition: 'color $transitionDuration $transitionTiming, border-bottom-color $transitionDuration $transitionTiming',
+    transition:
+      'color $transitionDuration $transitionTiming, border-bottom-color $transitionDuration $transitionTiming',
   },
   pre: {
     code: {
@@ -99,7 +100,15 @@ export const Content = styled('section', {
   },
   'pre, code': {
     fontVariantLigatures: 'none',
-  }
+  },
+  details: {
+    summary: {
+      fontWeight: 700,
+      fontSize: '1.25rem',
+    },
+    marginTop: '0.6rem',
+    marginBottom: '1rem',
+  },
 });
 
 export const Footer = styled('footer', {
