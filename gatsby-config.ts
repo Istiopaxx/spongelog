@@ -149,6 +149,14 @@ export const plugins = [
       icon: siteMetadata.icon,
     },
   },
+  {
+    resolve: 'gatsby-plugin-robots-txt',
+    options: {
+      host: 'https://keisluvlog.netlify.app',
+      sitemap: 'https://keisluvlog.netlify.app/sitemap/sitemap-0.xml',
+      policy: [{ userAgent: '*', allow: '/' }],
+    },
+  },
   'gatsby-plugin-react-helmet',
   'gatsby-plugin-offline',
   'gatsby-plugin-typegen',

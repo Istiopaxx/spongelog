@@ -33,8 +33,8 @@ export const { styled, css, getCssText, createTheme, globalCss } = createStitche
       borderGray: '$gray200',
       borderPrimary: '$primary200',
 
-      inlineCodeBackground: '#404040',
-      inlineCodeColor: '#ffc7d2',
+      inlineCodeBackground: '#f9f2f4',
+      inlineCodeColor: '#db4c69',
       link: '$primary400',
 
       titleFilterBackground: '$gray100',
@@ -90,6 +90,9 @@ export const darkTheme = createTheme('dark-theme', {
 
     borderGray: '$gray200',
     borderPrimary: '$primary200',
+
+    inlineCodeBackground: '#636363',
+    inlineCodeColor: '#8fcdff',
 
     link: '$primary200',
 

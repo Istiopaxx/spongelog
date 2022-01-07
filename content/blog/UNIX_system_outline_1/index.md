@@ -208,7 +208,7 @@ ls > file.list
 버퍼링되지 않는 I/O는 `open`, `read`, `write`, `lseek`, `close` 같은 함수가 제공해줍니다.
 이 모든 함수들은 파일 서술자를 이용합니다.
 
-> File descriptors, Std input/output/err, unbuffered I/O에 대해선 [이 포스트]()에서 자세히 설명합니다.
+> File descriptors, Std input/output/err, unbuffered I/O에 대해선 [이 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_1/)에서 자세히 설명합니다.
 
 
 ## Standard I/O
