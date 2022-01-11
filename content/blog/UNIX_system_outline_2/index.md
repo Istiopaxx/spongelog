@@ -12,16 +12,16 @@ description: UNIX 시스템을 전반적으로 설명합니다. 2편 - 프로세
 이번 포스트에서는 프로세스 제어와 에러 처리, 시그널, 시스템 호출과 라이브러리 함수들에 대해 간략하게 훑어보겠습니다.
 
 
-# Programs and Processes
+## Programs and Processes
 
-## Program
+### Program
 
 프로그램이 뭔가요?
 
 프로그램이란 디스크에 있는 실행가능한 파일입니다.
 프로그램은 메모리에 읽혀진 후 일곱가지 `exec`함수 바리에이션에 의해 커널에서 실행됩니다.
 
-## Processes & Process ID
+### Processes & Process ID
 
 실행되고 있는 프로그램은 `process`라고 부르는데, 이 다음부터 프로세스라는 말을 자주 쓸 겁니다.
 UNIX 시스템은 모든 프로세스가 `process ID`라고 부르는 고유한 숫자 식별자를 가지도록 합니다. 
@@ -37,7 +37,7 @@ root           1       0  0  2021 ?        00:01:15 /sbin/init
 위에서 `PID`라고 적힌 컬럼의 숫자가 process ID입니다.
 1번 프로세스는 가장 처음 시작되고 모든 프로세스의 조상 프로세스 쯤이 되는 `init` 프로세스인데, 나중에 살펴보겠습니다.
 
-## Process Control
+### Process Control
 
 프로세스를 제어하기 위해 세 가지 주요한 함수가 있는데, `fork`, `exec`(사실 7가지가 있지만 퉁쳐서 쓰겠습니다), `waitpid`입니다.
 1. `fork`
@@ -54,7 +54,7 @@ root           1       0  0  2021 ?        00:01:15 /sbin/init
 > 이 포스팅에선 코드 예시를 들지는 않지만, [이 포스트]()에서 코드와 함께 프로세스 제어 과정을 살펴보겠습니다.
 
 
-## Thread & Tread ID
+### Thread & Tread ID
 
 일반적으로, 프로세스에는 제어의 흐름이 하나만 존재합니다.
 즉 실행 중에는 기계 명령들이 하나씩 실행됩니다.
@@ -86,7 +86,7 @@ root           1       0  0  2021 ?        00:01:15 /sbin/init
 > 스레드와 프로세스의 상호작용, 스레드에 대한 더 깊은 이야기는 [이 포스트]()에서 다루겠습니다.
 
 
-# Signal
+## Signal
 
 신호(signal, 이하 시그널로 칭함)라는 것은 프로세스에게 어떤 상황(condition)이 발생했음을 알리는 방법입니다.
 예를 들어서, 프로세스가 0으로 나누는 계산을 했다면 `SIGFPE`(floating-point exception)라는 시그널이 프로세스에게 보내집니다.
@@ -114,7 +114,7 @@ Interrupt key(ex. `Ctrl+C`)와 Quit key(ex. `Ctrl+\`)라고 부르는 두 종료
 
 > [이 포스트]()에서 시그널에 대해 더 자세히 보겠습니다.
 
-# Error Handling
+## Error Handling
 
 UNIX 시스템에서는 대체로 오류가 발생하면 음의 값을 리턴합니다.
 그리고 `errno`라는 정수 값이 설정되어 오류 원인을 알려줍니다.
@@ -125,7 +125,7 @@ UNIX 시스템에서는 대체로 오류가 발생하면 음의 값을 리턴합
 어떤 함수들은 음수 값을 리턴하기 보다는 다른 관례가 있는 함수도 있습니다.
 예를 들면, 어떤 객체를 향하는 포인터를 반환하는 대부분의 함수는 오류 시에 null 포인터를 리턴합니다.
 
-## errno
+### errno
 
 `<errno.h>` 헤더 파일에는 `errno` 심볼과 errno에 설정될 수 있는 각 값에 대한 상수들이 정의되어 있습니다.
 이 상수들은 문자 **E**로 시작하는 이름을 가지고 있습니다.
@@ -153,7 +153,7 @@ extern int *_ _errno_location(void);
     + 따라서 에러를 처리할 때는 함수의 리턴값을 통해 에러가 발생한 것을 먼저 알아내고, 그 원인을 `errno` 값에서 분석해야 합니다.
 2. 어떤 함수도 `errno` 값을 **0**으로 설정할 수 없으며, `<errno.h>` 파일에 정의된 모든 상수는 **0**의 값을 가지지 않습니다.
 
-## Error Recovery
+### Error Recovery
 
 `<errno.h>`파일에 정의된 에러들은 두 가지 분류로 나눌 수 있습니다.
 
@@ -171,22 +171,22 @@ extern int *_ _errno_location(void);
 합리적인 복구 전략을 사용한다면 프로그램이 비정상 종료를 회피하고 더욱 견고하게 만들 수 있습니다.
 
 
-# System Calls & Library Functions
+## System Calls & Library Functions
 
-## System Call
+### System Call
 모든 운영체제는 프로그램이 커널에게 서비스를 요청할 수 있는 서비스 지점(service point)를 제공합니다.
 UNIX 시스템에서 커널에 대한 서비스 포인트를 시스템 호출이라고 부릅니다.
 UNIX 시스템은 각 시스템 콜마다 똑같은 이름의 함수를 C 표준 라이브러리에 정의하였습니다.
 사용자 프로세스는 표준 C 호출 시퀀스를 이용해서 이 함수들을 호출합니다.
 그럼 이 함수들은 해당 커널 서비스를 실행합니다.
 
-## Library Function
+### Library Function
 
 시스템 콜 말고도, 프로그래머들은 프로그래밍을 쉽게 해주는 범용 라이브러리 함수를 사용할 수 있습니다. 
 이 함수들은 커널의 시스템 콜을 호출할 수 있긴 하지만, 커널에 대한 진입점은 아닙니다.
 예를 들면 `printf`함수는 문자열을 출력하기 위해 `write` 시스템 콜을 활용할 수 있지만, `strcpy`(문자열을 복사)나 `atoi`(아스키 코드를 정수로 변환)은 커널과 관련이 없습니다.
 
-## Diffrence between system call & library function
+### Diffrence between system call & library function
 
 구현자의 입장에서는 시스템 콜과 라이브러리 함수를 구분하는 것이 중요합니다.
 하지만 사용자의 입장에서는, 차이가 별로 없습니다.
@@ -204,7 +204,7 @@ UNIX 시스템은 각 시스템 콜마다 똑같은 이름의 함수를 C 표준
 
 또 다른 차이로는 시스템 콜은 최소한의 인터페이스를 제공하지만, 라이브러리 함수는 더 정교한 기능성을 제공한다는 것입니다.
 이것은 이미 위의 `malloc` 예시에서 보았습니다.
-이후에 [non-buffered I/O]()와 [standard I/O]()를 비교해보아도 차이가 느껴질 겁니다.
+이후에 [non-buffered I/O](https://keisluvlog.netlify.app/UNIX_file_IO_1/)와 [standard I/O]()를 비교해보아도 차이가 느껴질 겁니다.
 
 <img src="./system_call.PNG" width="500"/>
 
@@ -212,12 +212,12 @@ UNIX 시스템은 각 시스템 콜마다 똑같은 이름의 함수를 C 표준
 특히 프로세스 제어를 위한 시스템 호출(`fork`, `exec`, `waitpid`)은 주로 응용 프로그램이 직접 호출합니다.
 하지만 이런 보편적인 사용법을 단순화하기 위해 `system`이나 `popen`같은 라이브러리 함수도 존재합니다.
 
-# Finish
+## Finish
 
 이번 포스트에서는 저번 포스트에 이어서 유닉스 시스템 개요에 대해 살펴보았습니다.
 다음 포스트부터는 차근차근 여러 유닉스 시스템의 구성요소에 대해 살펴보도록 하겠습니다.
 
-## References
+### References
 
 1. [Advanced Programming in the UNIX environment. 3ed](https://www.amazon.com/Advanced-Programming-UNIX-Environment-3rd/dp/0321637739)
 

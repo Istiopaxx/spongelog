@@ -14,13 +14,9 @@ UNIX 시스템에서는 대부분의 파일 입출력을 `open`, `read`, `write`
 이 함수들은 [이 포스트]()에서 설명할 **표준 입출력 함수**와 반대되는 개념으로 **버퍼링없는 입출력(unbuffered I/O)** 라고 부르기도 합니다.
 "버퍼링 없는"이라는 용어는 `read` 나 `write` 를 호출할 때마다 매번 커널의 시스템 호출을 실행한다는 의미입니다.
 
-또한, 동일한 파일에 대해 여러 프로세스가 입출력하는 상황에서는 **원자적(atomic)** 연산이라는 개념이 중요합니다.
-파일 입출력과 `open` 함수의 인수들에 관련해서 원자적 연산 개념을 살펴보고, 여러 프로세스가 파일을 공유하는 방식과 그에 연관되는 커널 자료구조도 살펴보겠습니다.
-그 후엔 `dup`, `fcntl`, `sync`, `fsync`, `ioctl` 함수를 설명합니다.
+> 이번 포스트에서는 파일 서술자와 `open`, `read`, `write`, `lseek`, `close` 함수를 간략히 다루겠습니다.
 
-> 이번 포스트에서는 파일 서술자와 `open`, `read`, `write`, `lseek`, `close` 함수를 다루겠습니다.
-
-# File Descriptors
+## File Descriptors
 
 커널에서는 프로세스에 열린 파일들을 파일 서술자로 식별합니다.
 파일 서술자는 음이 아닌 정수로, 기존 파일을 열거나 새 파일을 생성할 때 커널은 프로세스에게 파일 디스크립터를 리턴합니다.
@@ -38,7 +34,7 @@ UNIX 시스템에서는 대부분의 파일 입출력을 `open`, `read`, `write`
 파일 서술자의 범위는 `0` **~** `OPEN_MAX-1` 입니다.
 OPEN_MAX는 유닉스의 구현마다 다르며, 대부분의 시스템은 63개 이상의 파일을 동시에 열 수 있게 구현되어 있습니다.
 
-# `open` and `openat` Functions
+## `open` and `openat` Functions
 
 파일을 열거나 생성할 때에는 `open` 함수나 `openat` 함수를 사용합니다.
 
@@ -49,57 +45,8 @@ int open(const char *path, int oflag, ... /* mode_t mode */ );
 int openat(int fd, const char *path, int oflag, ... /* mode_t mode */ );
 // Both return: file descriptor if OK, −1 on error
 ```
-<details>
-<summary>파라미터 설명</summary>
 
-**1. `path` 파라미터**
-
-열거나 생성할 파일의 이름입니다.
-
-**2. `oflag` 파라미터**
-
-원하는 옵션을 지정합니다.
-다음과 같은 상수를 한 개 또는 여러 개를 비트 OR로 결합하여 전달하면 됩니다.
-
-<details>
-<summary>필수 상수</summary>
-
-**아래 다섯 상수 중 하나를 반드시 지정해야 하며, 단 하나만 지정해야 합니다.**
-
-+ **O_RDONLY**
-  - 읽기 전용으로 열기
-+ **O_WRONLY**
-  - 쓰기 전용으로 열기
-+ **O_RDWR**
-  - 읽기 및 쓰기로 열기
-+ **O_EXEC**
-  - 실행 전용으로 열기
-+ **O_SEARCH**
-  - 디렉토리의 경우, 검색 전용으로 열기
-</details>
-
-
-<details>
-<summary>선택 상수</summary>
-
-**아래 상수들은 선택적입니다.**
-
-+ **O_APPEND**
-  - 파일 쓰기 시 파일의 끝에 추가합니다.
-+ **O_CLOEXEC**
-  - FD_CLOEXEC 파일 서술자 플래그를 설정합니다.
-+ **O_CREAT**
-  - 파일이 존재하지 않으면 새로 생성합니다.
-  - 이 옵션을 지정하려면 선택 파라미터 mode를 지정해야 하는데, 새 파일의 접근 권한 비트를 의미합니다.
-+ **O_DIRECTORY**
-  - path 파라미터가 디렉터리를 가리키지 않으면 오류가 발생합니다.
-+ **O_EXCL**
-  - O_CREAT를 지정했는데, 해당 파일이 이미 존재하면 오류가 발생합니다.
-  - 파일이 이미 존재하는지, 파일이 존재하지 않을 때 파일 생성이 원자적 연산인지의 여부를 판정합니다.
-+ 이하 생략...
-</details>
-  
-**3. `fd` 파라미터**
+위는 함수 원형이고, [open](https://man7.org/linux/man-pages/man3/open.3p.html)과 [openat](https://man7.org/linux/man-pages/man3/openat.3p.html) 명세입니다.
 
 `fd` 파라미터는 `openat` 함수가 `open` 함수와 차별화되는 특징입니다.
 이 파라미터는 상황에 따라 다음 세 가지 용도로 쓰입니다.
@@ -110,17 +57,6 @@ int openat(int fd, const char *path, int oflag, ... /* mode_t mode */ );
 
 3. `path` 인수에 상대 경로이름을 지정하고 `fd` 는 `AT_FDCWD` 라는 특별한 상수 값을 지정하면, 상대 경로이름은 현재 작업디렉터리를 기준으로 평가되며, `openat` 는 `open` 과 동일하게 동작합니다.
 
-**4. `mode` 옵셔널 파라미터**
-
-`O_CREAT` 를 설정하였을 때, 새로 생성되는 파일의 접근 권한을 나타내는 **umask** 값입니다. 
-파일의 접근 권한 값에 대해서는 [이 포스트]()에서 더 자세히 살펴보겠습니다.
-
-
-
-</details>
-
-
----
 
 `openat` 함수는 두 가지 문제를 해결하기 위해 추가되었습니다.
 1. 이 함수는 스레드들이 현재 작업 디렉터리 이외의 디렉터리를 기준으로 상대 경로이름을 지정해서 파일을 열 수 있게 해줍니다.
@@ -128,7 +64,7 @@ int openat(int fd, const char *path, int oflag, ... /* mode_t mode */ );
 2. 이 함수는 점검 시간 대 사용 시간(time-of-check-to-time-of-use, TOCTTOU) 오류를 피하는 용도로 사용됩니다.
     + [TOCTTOU ATTACK](https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use)에 대해선 위키를 참조해주세요.
 
-# `creat` Function
+## `creat` Function
 
 `open` 계열 함수를 사용해서 파일을 생성할 수도 있지만, `creat` 함수를 호출해서 생성할 수도 있습니다.
 
@@ -137,22 +73,8 @@ int openat(int fd, const char *path, int oflag, ... /* mode_t mode */ );
 int creat(const char *path, mode_t mode);
 // Returns: file descriptor opened for write-only if OK, −1 on error
 ```
-<details>
-<summary>파라미터 설명</summary>
 
-**1. `path` 파라미터**
-
-생성할 파일의 이름입니다. 
-절대 경로이름과 상대 경로이름 둘 다 가능합니다.
-
-**2. `mode` 파라미터**
-
-생성할 파일의 접근 권한 값입니다.
-
-</details>
-
-
----
+위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/creat.3p.html)입니다.
 
 
 `creat` 함수는 다음 호출과 동일합니다.
@@ -168,7 +90,7 @@ open(path, O_WRONLY | O_CREAT | O_TRUNC, mode)
 open(path, O_RDWR | O_CREAT | O_TRUNC, mode)
 ```
 
-# `close` Function
+## `close` Function
 
 열린 파일을 닫을 때 `close` 함수를 호출합니다.
 ```C
@@ -176,23 +98,14 @@ open(path, O_RDWR | O_CREAT | O_TRUNC, mode)
 int close(int fd);
 // Returns: 0 if OK, −1 on error
 ```
-<details>
-<summary>파라미터 설명</summary>
 
-**1. `fd` 파라미터**
-
-닫을 파일의 파일 디스크립터 값입니다.
-
-</details>
-
-
----
+위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/close.3p.html)입니다.
 
 파일을 닫으면, 프로세스가 그 파일에 대해 가지고 있었던 레코드 락을 다 풀게 되는데, 이는 [이 포스트]()에서 더 확인하겠습니다.
 프로세스가 종료되면 프로세스에 대해 열려 있던 모든 파일을 커널이 닫아줍니다.
 그래서 열린 파일을 명시적으로 닫지 않는 프로그램들도 많습니다.
 
-# `lseek` Function
+## `lseek` Function
 
 모든 열린 파일에는 "현재 파일 오프셋"이 있습니다.
 보통의 경우엔 파일 오프셋은 파일 시작에서부터 센 바이트 수를 의미하는 음이 아닌 정수입니다.
@@ -206,33 +119,16 @@ off_t lseek(int fd, off_t offset, int whence);
 // Returns: new file offset if OK, −1 on error
 ```
 
-<details>
-<summary>파라미터 설명</summary>
+위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/lseek.3p.html)입니다.
 
-**1. `fd` 파라미터**
-
-파일 오프셋을 설정할 파일의 파일 디스크립터
-
-**2. `offset` 파라미터**
-
-파일 오프셋에 더해주는 오프셋 값.
-`whence` 인수에 따라 다릅니다.
-
-**3. `whence` 파라미터**
-
-파일 오프셋을 어디서부터 더하는지의 값
+세번째 인수인 `whence` 파라미터의 값에 따라 오프셋을 더하는 위치가 달라집니다.
 
 1. *whence*가 `SEEK_SET`이면 파일의 오프셋은 파일 시작부터 바이트 **offset** 개만큼 나아간 위치로 설정됩니다.
 2. *whence*가 `SEEK_CUR`이면 파일의 오프셋은 현재 오프셋 위치에서 **offset** 만큼 나아간 위치로 설정됩니다.
 3. *whence*가 `SEEK_END`이면 파일의 오프셋은 파일 맨 끝(파일 크기)에 **offset**을 더한 값으로 설정됩니다.
 
-</details>
 
-
-
----
-
-## Seeking File 
+### Example: Seeking File 
 `lseek` 호출이 성공하면 새로운 파일 오프셋이 반환되므로, offset 파라미터를 0으로 설정하고 기준 위치를 현재 위치로(SEEK_CUR) 설정하면 현재 오프셋을 알아낼 수 있습니다.
 ```C
 off_t currpos;
@@ -262,7 +158,7 @@ int main(void)
 
 </details>
 
-## Hole in the file
+### Example: Hole in the file
 
 파일의 오프셋은 파일의 현재 크기보다 클 수 있습니다.
 그런 파일에 대해 write 를 호출하면 파일이 적절히 확장되는데, 그러면 파일에 "구멍"이 생기게 됩니다.
@@ -325,7 +221,7 @@ int main(void)
 
 </details>
 
-# `read` Function
+## `read` Function
 
 열린 파일로부터 자료를 읽을 때는 `read` 함수를 사용합니다.
 
@@ -335,25 +231,7 @@ ssize_t read(int fd, void *buf, size_t nbytes);
 // Returns: number of bytes read, 0 if end of file, −1 on error
 ```
 
-<details>
-<summary>파라미터 설명</summary>
-
-
-**1. `fd` 파라미터**
-
-읽어들일 파일의 파일 디스크립터
-
-**2. `buf` 파라미터**
-
-읽은 바이트를 저장할 버퍼
-
-**3. `nbytes` 파라미터**
-
-파일로부터 읽어들일 바이트 수
-
-</details>
-
----
+위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/read.3p.html)입니다.
 
 다음과 같은 경우 실제로 읽어들인 바이트 수가 셋째 인수로 요청한 바이트 수보다 적을 수 있습니다.
 1. 정규 파일을 읽는데 요청된 바이트를 모두 읽기 전에 파일의 끝에 도착한 경우.
@@ -371,7 +249,7 @@ ssize_t read(int fd, void *buf, size_t nbytes);
 읽기 연산은 파일의 현재 오프셋부터 시작하고, 읽기가 성공한 경우 실제로 읽은 바이트 수만큼 오프셋 값이 증가합니다.
 
 
-# `write` 함수
+## `write` 함수
 
 열린 파일에 자료를 기록할 때에는 `write`함수를 사용합니다.
 ```C
@@ -379,25 +257,8 @@ ssize_t read(int fd, void *buf, size_t nbytes);
 ssize_t write(int fd, const void *buf, size_t nbytes);
 // Returns: number of bytes written if OK, −1 on error
 ```
-<details>
-<summary>파라미터 설명</summary>
 
-
-**1. `fd` 파라미터**
-
-쓸 파일의 파일 디스크립터
-
-**2. `buf` 파라미터**
-
-쓸 바이트를 저장한 버퍼
-
-**3. `nbytes` 파라미터**
-
-파일에 쓸 바이트 수
-
-</details>
-
----
+위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/write.3p.html)입니다.
 
 보통의 경우 리턴값은 nbytes 인수의 값을 반환합니다.
 그렇지 않다면 오류가 발생한 것인데, 흔히 발생하는 상황은 디스크 용량이 부족하거나 주어진 프로세스에 대한 파일 크기 한계를 넘었을 때입니다.
@@ -407,7 +268,7 @@ ssize_t write(int fd, const void *buf, size_t nbytes);
 쓰기 연산이 끝나면 기록된 바이트 수만큼 파일의 오프셋이 증가합니다.
 
 
-# I/O Efficiency
+## I/O Efficiency
 
 입출력 효율성을 측정하는 프로그램 예시를 보겠습니다.
 
@@ -455,10 +316,10 @@ int main(void)
 
 
 
-# Finish
+## Finish
 
 [다음 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_2/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
 
-## References
+### References
 
 1. [Advanced Programming in the UNIX environment. 3ed](https://www.amazon.com/Advanced-Programming-UNIX-Environment-3rd/dp/0321637739)

@@ -35,7 +35,7 @@ UNIX_Programming 태그의 포스트 시리즈에서 얘기할 것은 Operating 
 
 > 이번 포스트에서는 UNIX 시스템 전반과 사용자 식별, 파일 시스템, 입출력, 시간 처리등에 대해 간단하게 살펴보겠습니다.
 
-## UNIX Architecture
+### UNIX Architecture
 
 Operating System(운영체제)란 무엇일까요?
 
@@ -53,7 +53,7 @@ Operating System(운영체제)란 무엇일까요?
 
 
 
-## Shell
+### Shell
 
 UNIX 시스템 로그인이 성공하면 셸 프로그램에 명령을 입력하고 UNIX 시스템을 사용할 수 있게 됩니다.
 셸은 사용자 입력을 읽어서 명령을 실행하는 명령줄 해석기(Command Line Interpreter)입니다.
@@ -68,9 +68,9 @@ UNIX 시스템은 로그인한 사용자의 셸을 패스워드 파일 해당 �
 
 
 
-# User Identification
+## User Identification
 
-## Login
+### Login
 
 UNIX 운영체제를 사용하려면, 먼저 로그인을 해야 합니다. 
 
@@ -100,7 +100,7 @@ root:x:0:0:root:/root:/bin/bash
 위에서 암호화된 패스워드는 모두 똑같이 `x`로 나타나는데, 이는 개별적인 파일에 옮겨져 있어서 그렇습니다.
 > [이 포스트]()에서 이 파일들과 파일에 접근하는 함수를 몇가지 보겠습니다.
 
-## User ID
+### User ID
 
 패스워드 파일에 있는 사용자 ID는 시스템이 사용자를 식별하는 숫자 값입니다.
 이 값은 시스템 관리자에 의해 할당되고, 사용자 자신이 바꿀 수는 없습니다. 
@@ -109,7 +109,7 @@ root:x:0:0:root:/root:/bin/bash
 특히 사용자 ID이 0인 사용자를 `root` 혹은 슈퍼사용자(superuser)라고 부릅니다.
 슈퍼사용자의 패스워드 파일에서의 로그인 이름은 보통 root이며, 슈퍼사용자는 시스템의 모든 것을 마음대로 주무를 수 있습니다.
 
-## Group ID
+### Group ID
 
 패스워드 파일엔 사용자의 그룹 ID도 있는데, 이것 역시 시스템 관리자가 할당합니다.
 보통 그룹은 사용자들을 조직화하여 권한을 부여하는데에 쓰이며, 그룹에 속한 사용자는 해당 그룹의 권한을 얻게 됩니다.
@@ -119,7 +119,7 @@ root:x:0:0:root:/root:/bin/bash
 <img src="./group.PNG" alt="cat_/etc/group_result" width="400">
 <p style="text-align: center"> cat /etc/group 커맨드 결과 </p>
 
-## Login Name & Group Name
+### Login Name & Group Name
 
 `/etc/group`파일에 보면, 그룹ID(숫자)를 그룹 이름(문자열)에 대응시키는 내용입니다.
 마찬가지로 `/etc/passwd`파일도 사용자마다 사용자ID(숫자)와 로그인 이름(문자열)이 있습니다.
@@ -138,9 +138,9 @@ root:x:0:0:root:/root:/bin/bash
 
 
 
-# File and Directory
+## File and Directory
 
-## File System
+### File System
 
 UNIX 파일 시스템은 디렉터리와 파일들을 트리 형태로 조직화한 것입니다.
 파일 시스템의 모든 것은 `root`라고 부르는 디렉터리에서 시작하고, 그 이름은 한 문자짜리 `/`입니다.
@@ -157,7 +157,7 @@ drwxrwxr-x  8 ubuntu ubuntu  4096 Sep 29 15:31 .npm
 
 stat 함수와 fstat 함수는 한 파일의 모든 특성을 담은 정보 구조체를 돌려줍니다.
 
-## Filename
+### Filename
 
 디렉터리 안에서 파일들은 모두 이름이 있습니다.
 파일 이름에 사용할 수 없는 문자는 단 두 개로, 슬래시 문자(`/`)와 널(`NULL`)문자 입니다.
@@ -169,13 +169,13 @@ stat 함수와 fstat 함수는 한 파일의 모든 특성을 담은 정보 구�
 새 디렉터리를 만들면 자동으로 생성되는 파일 이름이 두 개가 있는데, `.`(현재 디렉터리)와 `..`(부모 디렉터리)가 생깁니다.
 또, 루트 디렉터리는 `.`와 `..`이 같습니다.
 
-## Pathname
+### Pathname
 
 경로 이름(pathname)은 하나 이상의 파일 이름들이 `/`로 연결된 형태입니다.
 `/`로 시작하는 경로를 `절대 경로`(absolute pathname)라고 하고, 그렇지 않으면 `상대 경로`(relative pathname)라고 부릅니다.
 상대 경로이름은 현재 디렉터리에 상대적인 파일을 가리키게 됩니다.
 
-## Working Directory & Home Directory
+### Working Directory & Home Directory
 
 현재 프로세스가 작업하는 디렉터리는 현재 작업 디렉터리(Current working directory/pwd)라고 부릅니다.
 작업 디렉터리는 모든 상대 경로이름이 해석되는 기준으로 쓰입니다.
@@ -185,14 +185,14 @@ stat 함수와 fstat 함수는 한 파일의 모든 특성을 담은 정보 구�
 
 > File과 Directory에 대한 내용들은 [이 포스트]()에서 자세히 다루겠습니다.
 
-# Input & Output
+## Input & Output
 
-## File Descriptors
+### File Descriptors
 
 파일 서술자는 커널이 프로세스가 접근하는 파일들을 구분하기 위해 쓰는, 일반적으로 작은 양의 정수입니다.
 프로세스가 이미 존재하는 파일을 열거나 새 파일을 만들면, 커널은 파일을 읽고 쓰는데 쓸 파일 서술자를 반환합니다.
 
-## Standard Input, Standard Output, Standard Error
+### Standard Input, Standard Output, Standard Error
 
 일반적으로 프로그램이 실행되면, 모든 셸들은 표준 입력, 표준 출력, 표준 에러의 세 가지 서술자를 엽니다.
 `ls` 같은 단순한 커맨드를 실행하면, 세 가지 모두 터미널에 연결됩니다.
@@ -203,7 +203,7 @@ ls > file.list
 위에서, `ls` 커맨드는 표준 출력을 file.list 파일로 리다이렉트합니다.
 
 
-## Unbuffered I/O
+### Unbuffered I/O
 
 버퍼링되지 않는 I/O는 `open`, `read`, `write`, `lseek`, `close` 같은 함수가 제공해줍니다.
 이 모든 함수들은 파일 서술자를 이용합니다.
@@ -211,7 +211,7 @@ ls > file.list
 > File descriptors, Std input/output/err, unbuffered I/O에 대해선 [이 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_1/)에서 자세히 설명합니다.
 
 
-## Standard I/O
+### Standard I/O
 
 표준 입출력 함수들은 버퍼링 없는 입출력 함수의 버퍼링되는 인터페이스를 제공합니다.
 표준 입출력을 쓰는 것은 최적의 버퍼 사이즈를 결정하는 등의 문제를 생각하지 않아도 되게 해주며, 라인 단위 입력을 처리하기 쉽게 해줍니다.
@@ -221,18 +221,18 @@ ls > file.list
 > 표준 입출력 라이브러리에 대해선 [이 포스트]()를 참고하세요.
 
 
-# Time Values
+## Time Values
 
 역사적으로 UNIX 시스템은 두 가지 다른 시간 값을 써왔습니다.
 그 두가지는 달력 시간과 프로세스 시간인데, 각각 살펴보겠습니다.
 
-## Calendar time
+### Calendar time
 
 이 값은 1970년 1월 1일(UTC)으로부터 몇 초가 지났는지에 대한 값입니다.
 이 값은 파일이 마지막으로 수정된 시간같은 항목에서 쓰입니다.
 원시 시스템 데이터 타입 `time_t`가 이 시간 값을 사용합니다.
 
-## Process time
+### Process time
 
 CPU Time이라고도 부르는 프로세스 시간은 프로세스가 사용한 CPU 리소스 점유 시간을 측정한 것입니다.
 프로세스 시간은 클락 틱(clock tick) 단위로 측정되고, 보통 초당 50, 60 또는 100틱 정도의 시간입니다.
@@ -256,11 +256,11 @@ CPU Time이라고도 부르는 프로세스 시간은 프로세스가 사용한 
 
 
 
-# Finish
+## Finish
 
 [다음 포스트](https://keisluvlog.netlify.app/UNIX_system_outline_2/)에서 이번 포스트에서 다루지 못한 나머지 UNIX 특성을 대략적으로 다뤄보도록 하겠습니다.
 UNIX_Programming 포스트 시리즈는 각 주제에 대해 더 자세히 다루는 포스팅이 계속 있을 예정입니다.
 
-## References
+### References
 
 1. [Advanced Programming in the UNIX environment. 3ed](https://www.amazon.com/Advanced-Programming-UNIX-Environment-3rd/dp/0321637739)
