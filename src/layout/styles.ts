@@ -2,7 +2,8 @@ import { styled, globalCss } from '~/stitches.config';
 
 export const globalStyles = globalCss({
   ':root': {
-    fontFamily: '"Ubuntu", "Pretendard", apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily:
+      '"Ubuntu", "Pretendard", apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     textRendering: 'optimizeLegibility',
   },
   '*': {
@@ -85,6 +86,7 @@ export const globalStyles = globalCss({
     },
   },
   blockquote: {
+    marginTop: '1.5rem',
     paddingLeft: '1rem',
     borderLeft: '0.25rem solid $borderPrimary',
   },
@@ -98,9 +100,14 @@ export const globalStyles = globalCss({
         marginLeft: '1.5rem',
       },
 
+      'li::marker': {
+        fontSize: '1.25rem'
+      },
       li: {
-        marginTop: '0.375rem',
-        marginBottom: '0.375rem',
+        marginTop: '0.5rem',
+        marginBottom: '0.5rem',
+
+        lineHeight: 1.625,
 
         p: {
           margin: 0,
@@ -110,12 +117,12 @@ export const globalStyles = globalCss({
 
     'pre[class^="language-"]': {
       borderRadius: '0.25rem',
-    }
+    },
   },
   ':not(pre) > code[class*="language-"]': {
     color: '$inlineCodeColor',
     background: '$inlineCodeBackground',
-  }
+  },
 });
 export const Root = styled('div', {
   display: 'flex',
@@ -125,7 +132,8 @@ export const Root = styled('div', {
 
   backgroundColor: '$backgroundColor',
 
-  transition: 'color $transitionDuration $transitionTiming, background-color $transitionDuration $transitionTiming',
+  transition:
+    'color $transitionDuration $transitionTiming, background-color $transitionDuration $transitionTiming',
 });
 
 export const Container = styled('div', {

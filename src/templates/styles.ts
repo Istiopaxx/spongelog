@@ -66,16 +66,17 @@ export const Content = styled('section', {
     marginBottom: '1.5rem',
     paddingBottom: '0.25rem',
     borderBottom: '1px solid $borderGray',
-
+    fontSize: '2.25rem',
     a: {
       borderBottom: 'none',
     },
   },
   h2: {
-    marginTop: '3rem',
+    marginTop: '4rem',
     marginBottom: '0.5rem',
     paddingBottom: '0.25rem',
-    // borderBottom: '1px solid $borderGray',
+    borderBottom: '1px solid $borderGray',
+    fontSize: '2rem',
 
     a: {
       borderBottom: 'none',
@@ -83,6 +84,7 @@ export const Content = styled('section', {
   },
   h3: {
     marginTop: '3rem',
+    fontSize: '1.5rem',
   },
   a: {
     borderBottom: '1px solid $borderPrimary',
