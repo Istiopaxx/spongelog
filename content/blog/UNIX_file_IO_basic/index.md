@@ -11,7 +11,7 @@ description: UNIX File I/O의 파일 디스크립터, open, read, write, lseek, 
 이번 포스트 시리즈에서는 UNIX 파일 입출력에 대해 설명합니다.
 
 UNIX 시스템에서는 대부분의 파일 입출력을 `open`, `read`, `write`, `lseek`, `close` 5개의 함수로 할 수 있습니다.
-이 함수들은 [이 포스트]()에서 설명할 **표준 입출력 함수**와 반대되는 개념으로 **버퍼링없는 입출력(unbuffered I/O)** 라고 부르기도 합니다.
+이 함수들은 **이 포스트** 에서 설명할 **표준 입출력 함수**와 반대되는 개념으로 **버퍼링없는 입출력(unbuffered I/O)** 라고 부르기도 합니다.
 "버퍼링 없는"이라는 용어는 `read` 나 `write` 를 호출할 때마다 매번 커널의 시스템 호출을 실행한다는 의미입니다.
 
 > 이번 포스트에서는 파일 서술자와 `open`, `read`, `write`, `lseek`, `close` 함수를 간략히 다루겠습니다.
@@ -101,7 +101,7 @@ int close(int fd);
 
 위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/close.3p.html)입니다.
 
-파일을 닫으면, 프로세스가 그 파일에 대해 가지고 있었던 레코드 락을 다 풀게 되는데, 이는 [이 포스트]()에서 더 확인하겠습니다.
+파일을 닫으면, 프로세스가 그 파일에 대해 가지고 있었던 레코드 락을 다 풀게 되는데, 이는 **이 포스트** 에서 더 확인하겠습니다.
 프로세스가 종료되면 프로세스에 대해 열려 있던 모든 파일을 커널이 닫아줍니다.
 그래서 열린 파일을 명시적으로 닫지 않는 프로그램들도 많습니다.
 
@@ -318,7 +318,7 @@ int main(void)
 
 ## Finish
 
-[다음 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_2/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
+[다음 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_advance/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
 
 ### References
 
