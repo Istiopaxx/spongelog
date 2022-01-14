@@ -1,5 +1,5 @@
 ---
-title: UNIX 파일 입출력 2.
+title: "UNIX 파일 I/O: 파일 공유와 원자적 연산, 그에 관련된 함수들"
 date: 2022-01-08
 tags: [UNIX, UNIX_Programming, UNIX_FILE_I/O]
 description: UNIX File I/O의 파일 공유와 원자적 연산, dup, sync, fsync, fdatasync, fcntl, ioctl을 설명합니다.

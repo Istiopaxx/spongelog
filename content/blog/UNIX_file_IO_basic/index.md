@@ -1,5 +1,5 @@
 ---
-title: UNIX 파일 입출력 1.
+title: "UNIX 파일 I/O: 파일 디스크립터와 기본 입출력 함수들"
 date: 2022-01-06
 tags: [UNIX, UNIX_Programming, UNIX_FILE_I/O]
 description: UNIX File I/O의 파일 디스크립터, open, read, write, lseek, close를 설명합니다.
