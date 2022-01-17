@@ -20,7 +20,7 @@ description: UNIX 시스템을 전반적으로 설명합니다. 1편 - 사용자
 복잡한 시스템을 여러 개의 계층으로 나누고, 각 계층간의 소통하는 인터페이스를 정의하면 인터페이스 변경이 아니라면 각 계층의 유지보수는 다른 계층에 영향을 적게 받게 됩니다. 
 그런 이유에서 컴퓨터 시스템은 아래처럼 여러 개의 계층으로 나눠져 있습니다.
 
-<img src="./computerSystem.PNG" alt="computer_system" width="600" />
+<img src="./computerSystem.AVIF" alt="computer_system" width="600" />
 
 
 가장 바깥쪽은 우리 최종 사용자들이 사용하는 응용 프로그램이 있고, 그 안쪽은 그 프로그램을 해석/실행하는 컴파일러/인터프리터가 있습니다.
@@ -45,7 +45,7 @@ Operating System(운영체제)란 무엇일까요?
 이런 커널에 대한 인터페이스는 시스템 호출(system call)이라고 부르는 소프트웨어 계층입니다.
 응용 프로그램들과 다른 여러 프로그램들은 시스템 호출을 이용해서 커널을 사용합니다.
 
-<img src="./unixStructure.PNG" alt="Unix_Structure" width="400" />
+<img src="./unixStructure.AVIF" alt="Unix_Structure" width="400" />
 
 응용 프로그램과 셸 프로그램, 공용 라이브러리는 커널을 사용하기 위해 system call을 거쳐야 합니다.
 공용 라이브러리는 시스템 호출을 쉽게 쓰게 해주는 인터페이스이고, 응용 프로그램은 시스템 호출과 공용 라이브러리 둘 다 활용할 수 있습니다.
@@ -60,7 +60,7 @@ UNIX 시스템 로그인이 성공하면 셸 프로그램에 명령을 입력하
 
 아래는 자주 쓰이는 셸 프로그램을 정리한 것입니다.
 
-![Shell_Kind](./shell.PNG)
+![Shell_Kind](./shell.AVIF)
 
 UNIX 시스템은 로그인한 사용자의 셸을 패스워드 파일 해당 사용자 행의 마지막 필드에 있는 셸 프로그램으로 결정합니다.
 
@@ -79,7 +79,7 @@ UNIX 운영체제를 사용하려면, 먼저 로그인을 해야 합니다.
 ```bash
 cat /etc/passwd
 ```
-![cat_etc_Passwd_Result](./etcPasswd.PNG)
+![cat_etc_Passwd_Result](./etcPasswd.AVIF)
 
 
 위의 결과에서 하나의 행은 :(콜론)으로 구분된 필드 7개로 구성되어 있습니다.
@@ -116,7 +116,7 @@ root:x:0:0:root:/root:/bin/bash
 추가로, 대부분의 UNIX 시스템은 사용자가 여러 그룹에 속할 수 있게 허용합니다. 
 시스템은 `/etc/group`파일에서 해당 사용자가 멤버로 등록된 첫 16개의 그룹을 읽어서 추가 그룹 ID를 얻습니다.
 
-<img src="./group.PNG" alt="cat_/etc/group_result" width="400">
+<img src="./group.AVIF" alt="cat_/etc/group_result" width="400">
 <p style="text-align: center"> cat /etc/group 커맨드 결과 </p>
 
 ### Login Name & Group Name
@@ -149,7 +149,7 @@ UNIX 파일 시스템은 디렉터리와 파일들을 트리 형태로 조직화
 디렉터리 항목은 파일이름과 파일의 특성 등을 담고 있는 정보라고 생각하면 편합니다. 
 파일의 특성들로는 파일의 종류, 파일의 크기, 파일의 소유자, 파일의 접근 권한, 파일의 마지막 수정 일시 등등.. 이 있습니다.
 
-![ls_Command_Result](./fileNdirectory.PNG)
+![ls_Command_Result](./fileNdirectory.AVIF)
 
 ```bash
 drwxrwxr-x  8 ubuntu ubuntu  4096 Sep 29 15:31 .npm
