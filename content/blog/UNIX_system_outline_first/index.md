@@ -1,5 +1,5 @@
 ---
-title: UNIX 시스템 개요 1.
+title: "UNIX 시스템 개요: 1편"
 date: 2022-01-03
 tags: [UNIX, UNIX_Programming]
 description: UNIX 시스템을 전반적으로 설명합니다. 1편 - 사용자 식별/파일 시스템/입출력/시간 처리
@@ -208,7 +208,7 @@ ls > file.list
 버퍼링되지 않는 I/O는 `open`, `read`, `write`, `lseek`, `close` 같은 함수가 제공해줍니다.
 이 모든 함수들은 파일 서술자를 이용합니다.
 
-> File descriptors, Std input/output/err, unbuffered I/O에 대해선 [이 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_basic/)에서 자세히 설명합니다.
+> File descriptors, Std input/output/err, unbuffered I/O에 대해선 [이 포스트](https://keisluvlog.netlify.app/unix_file_io_basic/)에서 자세히 설명합니다.
 
 
 ### Standard I/O
@@ -258,7 +258,7 @@ CPU Time이라고도 부르는 프로세스 시간은 프로세스가 사용한 
 
 ## Finish
 
-[다음 포스트](https://keisluvlog.netlify.app/UNIX_system_outline_second/)에서 이번 포스트에서 다루지 못한 나머지 UNIX 특성을 대략적으로 다뤄보도록 하겠습니다.
+[다음 포스트](https://keisluvlog.netlify.app/unix_system_outline_second/)에서 이번 포스트에서 다루지 못한 나머지 UNIX 특성을 대략적으로 다뤄보도록 하겠습니다.
 UNIX_Programming 포스트 시리즈는 각 주제에 대해 더 자세히 다루는 포스팅이 계속 있을 예정입니다.
 
 ### References

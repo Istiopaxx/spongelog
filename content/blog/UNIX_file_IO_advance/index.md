@@ -1,5 +1,5 @@
 ---
-title: "UNIX 파일 I/O: 파일 공유와 원자적 연산, 그에 관련된 함수들"
+title: "UNIX 파일 I/O: 파일 공유와 원자적 연산, 관련된 함수들"
 date: 2022-01-08
 tags: [UNIX, UNIX_Programming, UNIX_FILE_I/O]
 description: UNIX File I/O의 파일 공유와 원자적 연산, dup, sync, fsync, fdatasync, fcntl, ioctl을 설명합니다.
@@ -8,7 +8,7 @@ description: UNIX File I/O의 파일 공유와 원자적 연산, dup, sync, fsyn
 
 # FILE I/O in UNIX environment
 
-[저번 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_basic/)에 이어서, 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수에 대해 간략히 설명합니다.
+[저번 포스트](https://keisluvlog.netlify.app/unix_file_io_basic/)에 이어서, 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수에 대해 간략히 설명합니다.
 
 동일한 파일에 대해 여러 프로세스가 입출력하는 상황에서는 **원자적(atomic)** 연산이라는 개념이 중요합니다.
 파일 입출력과 관련해서 원자적 연산 개념을 살펴보고, 여러 프로세스가 파일을 공유하는 방식과 그에 연관되는 커널 자료구조도 살펴보겠습니다.
@@ -276,7 +276,7 @@ void clr_fl(int fd, int flags) /* flags are file status flags to turn off */
 `set_fl` 함수는 두 번째 인수로 들어오는 플래그를 켜주고, `clr_fl` 함수는 두 번째 인수의 플래그를 켜줍니다.
 
 이 함수들로 파일에 대해 플래그를 수정한 후 입출력 효율성을 확인해보겠습니다.
-[이 프로그램](https://keisluvlog.netlify.app/UNIX_file_IO_basic/#io-efficiency)에서 시작 부분에 
+[이 프로그램](https://keisluvlog.netlify.app/unix_file_io_basic/#io-efficiency)에서 시작 부분에 
 ```C
 set_fl(STDOUT_FILENO, O_SYNC);
 ```
@@ -287,7 +287,7 @@ set_fl(STDOUT_FILENO, O_SYNC);
 > **O_SYNC** 가 유용할 수 있는 상황은 데이터베이스 시스템이 있는데, `write`호출이 리턴되었다는 것이 디스크에 자료가 기록되었음을 의미한다면 시스템이 비정상 시스템 실패를 대비할 때 도움이 됩니다.
 
 **O_SYNC** 플래그를 켜면 모든 `write` 연산이 디스크에 실제로 쓰일 때까지 기다리기 때문에 비동기적 디스크 읽기/쓰기의 장점을 얻을 수 없으므로, 프로그램 실행 시간이 늘어날 것이라고 생각할 수 있습니다.
-이를 확인하기 위해, [위 프로그램](https://keisluvlog.netlify.app/UNIX_file_IO_basic/#io-efficiency)으로 492.6MB의 자료를 복사하는데, 한번은 **O_SYNC** 플래그를 켜서, 한번은 꺼서 실험해보았습니다. 
+이를 확인하기 위해, [위 프로그램](https://keisluvlog.netlify.app/unix_file_io_basic/#io-efficiency)으로 492.6MB의 자료를 복사하는데, 한번은 **O_SYNC** 플래그를 켜서, 한번은 꺼서 실험해보았습니다. 
 
 
 <img src="./io-efficiency-sync.PNG"/>
@@ -334,7 +334,7 @@ UNIX 시스템은 다양한 입/출력 장치를 이용해서 입출력을 할 �
 
 # Finish
 
-[저번 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_basic/)에 이어서 이번 포스트까지, UNIX 시스템의 기본적인 입출력 함수를 설명하였습니다.
+[저번 포스트](https://keisluvlog.netlify.app/unix_file_io_basic/)에 이어서 이번 포스트까지, UNIX 시스템의 기본적인 입출력 함수를 설명하였습니다.
 `read`와 `write`를 호출할 때 매번 커널의 시스템 콜을 호출하므로 이들을 버퍼링 없는 입출력으로 부릅니다.
 
 여러 프로세스가 동일한 파일을 다룰 때 생기는 문제와 관련하여 원자적 연산의 개념을 살펴보고, 커널이 열린 파일들에 대한 정보를 관리하는 데에 쓰는 자료구조도 보았습니다.

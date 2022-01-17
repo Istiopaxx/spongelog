@@ -1,5 +1,5 @@
 ---
-title: UNIX 시스템 개요 2.
+title: "UNIX 시스템 개요: 2편"
 date: 2022-01-04
 tags: [UNIX, UNIX_Programming]
 description: UNIX 시스템을 전반적으로 설명합니다. 2편 - 프로세스 제어/에러 처리/시그널/시스템 호출
@@ -7,7 +7,7 @@ description: UNIX 시스템을 전반적으로 설명합니다. 2편 - 프로세
 
 # Programming in UNIX Environment
 
-[지난 포스트](https://keisluvlog.netlify.app/UNIX_system_outline_first/)에 이어서 시작하겠습니다.
+[지난 포스트](https://keisluvlog.netlify.app/unix_system_outline_first/)에 이어서 시작하겠습니다.
 
 이번 포스트에서는 프로세스 제어와 에러 처리, 시그널, 시스템 호출과 라이브러리 함수들에 대해 간략하게 훑어보겠습니다.
 
@@ -204,7 +204,7 @@ UNIX 시스템은 각 시스템 콜마다 똑같은 이름의 함수를 C 표준
 
 또 다른 차이로는 시스템 콜은 최소한의 인터페이스를 제공하지만, 라이브러리 함수는 더 정교한 기능성을 제공한다는 것입니다.
 이것은 이미 위의 `malloc` 예시에서 보았습니다.
-이후에 [non-buffered I/O](https://keisluvlog.netlify.app/UNIX_file_IO_basic/)와 **standard I/O**를 비교해보아도 차이가 느껴질 겁니다.
+이후에 [non-buffered I/O](https://keisluvlog.netlify.app/unix_file_io_basic/)와 **standard I/O**를 비교해보아도 차이가 느껴질 겁니다.
 
 <img src="./system_call.PNG" width="500"/>
 
@@ -214,7 +214,7 @@ UNIX 시스템은 각 시스템 콜마다 똑같은 이름의 함수를 C 표준
 
 ## Finish
 
-이번 포스트에서는 [저번 포스트](https://keisluvlog.netlify.app/UNIX_system_outline_first/)에 이어서 유닉스 시스템 개요에 대해 살펴보았습니다.
+이번 포스트에서는 [저번 포스트](https://keisluvlog.netlify.app/unix_system_outline_first/)에 이어서 유닉스 시스템 개요에 대해 살펴보았습니다.
 다음 포스트부터는 차근차근 여러 유닉스 시스템의 구성요소에 대해 살펴보도록 하겠습니다.
 
 ### References

@@ -318,7 +318,7 @@ int main(void)
 
 ## Finish
 
-[다음 포스트](https://keisluvlog.netlify.app/UNIX_file_IO_advance/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
+[다음 포스트](https://keisluvlog.netlify.app/unix_file_io_advance/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
 
 ### References
 
