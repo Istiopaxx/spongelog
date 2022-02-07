@@ -23,6 +23,7 @@ export const TableOfContents = styled('div', {
     listStyle: 'none',
 
     li: {
+      marginTop: '0.25rem',
       paddingTop: '0.125rem',
       paddingBottom: '0.125rem',
 
@@ -73,7 +74,7 @@ export const Content = styled('section', {
   },
   h2: {
     marginTop: '4rem',
-    marginBottom: '0.5rem',
+    marginBottom: '1.5rem',
     paddingBottom: '0.25rem',
     borderBottom: '1px solid $borderGray',
     fontSize: '2rem',
@@ -84,6 +85,7 @@ export const Content = styled('section', {
   },
   h3: {
     marginTop: '3rem',
+    marginBottom: '1.5rem',
     fontSize: '1.5rem',
   },
   a: {

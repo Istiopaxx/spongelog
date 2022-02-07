@@ -104,8 +104,8 @@ export const globalStyles = globalCss({
         fontSize: '1.25rem'
       },
       li: {
-        marginTop: '0.5rem',
-        marginBottom: '0.5rem',
+        // marginTop: '0.5rem',
+        // marginBottom: '0.5rem',
 
         lineHeight: 1.625,
 

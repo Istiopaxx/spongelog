@@ -332,7 +332,7 @@ UNIX 시스템은 다양한 입/출력 장치를 이용해서 입출력을 할 �
 
 
 
-# Finish
+## Finish
 
 [저번 포스트](https://keisluvlog.netlify.app/unix_file_io_basic/)에 이어서 이번 포스트까지, UNIX 시스템의 기본적인 입출력 함수를 설명하였습니다.
 `read`와 `write`를 호출할 때 매번 커널의 시스템 콜을 호출하므로 이들을 버퍼링 없는 입출력으로 부릅니다.
@@ -341,7 +341,7 @@ UNIX 시스템은 다양한 입/출력 장치를 이용해서 입출력을 할 �
 
 다음 포스트 시리즈에서는 파일의 특성과 파일 시스템에 대해 다루겠습니다.
 
-## References
+### References
 
 1. [Advanced Programming in the UNIX environment. 3ed](https://www.amazon.com/Advanced-Programming-UNIX-Environment-3rd/dp/0321637739)
 

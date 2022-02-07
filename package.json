@@ -12,7 +12,7 @@
     "lint-staged": "lint-staged",
     "typecheck": "tsc --noEmit --skipLibCheck",
     "prepare": "husky install",
-    "copy": "cp googlee7a14b72855bd0b9.html public/"
+    "copy": "cp googlee7a14b72855bd0b9.html public/ && cp public/sitemap/sitemap-index.xml public/"
   },
   "dependencies": {
     "@fontsource/ubuntu": "^4.5.0",
