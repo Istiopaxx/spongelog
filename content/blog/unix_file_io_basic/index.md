@@ -1,10 +1,9 @@
 ---
-title: "UNIX 파일 I/O: 파일 디스크립터와 기본 입출력 함수들"
+title: 'UNIX 파일 I/O: 파일 디스크립터와 기본 입출력 함수들'
 date: 2022-01-06
 tags: [UNIX, UNIX_Programming, UNIX_FILE_I/O]
 description: UNIX File I/O의 파일 디스크립터, open, read, write, lseek, close를 설명합니다.
 ---
-
 
 # FILE I/O in UNIX environment
 
@@ -23,6 +22,7 @@ UNIX 시스템에서는 대부분의 파일 입출력을 `open`, `read`, `write`
 프로세스가 파일을 읽거나 쓸 때는 `open` 이나 `creat` 가 리턴한 파일 디스크립터를 `read` 나 `write` 함수의 인수로 넘겨주어서 처리합니다.
 
 ### STDIN, STDOUT, STDERR
+
 보통 UNIX 시스템 셸은 파일 디스크립터 0을 표준 입력, 1을 표준 출력, 2를 표준 에러에 연결합니다.
 이 관례는 다른 많은 셸과 여러 응용 프로그램에서도 쓰입니다.
 
@@ -37,7 +37,6 @@ OPEN_MAX는 유닉스의 구현마다 다르며, 대부분의 시스템은 63개
 ## `open` and `openat` Functions
 
 파일을 열거나 생성할 때에는 `open` 함수나 `openat` 함수를 사용합니다.
-
 
 ```C
 #include <fcntl.h>
@@ -57,12 +56,12 @@ int openat(int fd, const char *path, int oflag, ... /* mode_t mode */ );
 
 3. `path` 인수에 상대 경로이름을 지정하고 `fd` 는 `AT_FDCWD` 라는 특별한 상수 값을 지정하면, 상대 경로이름은 현재 작업디렉터리를 기준으로 평가되며, `openat` 는 `open` 과 동일하게 동작합니다.
 
-
 `openat` 함수는 두 가지 문제를 해결하기 위해 추가되었습니다.
+
 1. 이 함수는 스레드들이 현재 작업 디렉터리 이외의 디렉터리를 기준으로 상대 경로이름을 지정해서 파일을 열 수 있게 해줍니다.
-    + 한 프로세스의 모든 스레드는 동일한 현재 작업 디렉터리를 공유하므로, `open` 함수만으로는 스레드들이 동시에 다른 디렉터리에서 작업하게 하기 힘듭니다.
+   - 한 프로세스의 모든 스레드는 동일한 현재 작업 디렉터리를 공유하므로, `open` 함수만으로는 스레드들이 동시에 다른 디렉터리에서 작업하게 하기 힘듭니다.
 2. 이 함수는 점검 시간 대 사용 시간(time-of-check-to-time-of-use, TOCTTOU) 오류를 피하는 용도로 사용됩니다.
-    + [TOCTTOU ATTACK](https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use)에 대해선 위키를 참조해주세요.
+   - [TOCTTOU ATTACK](https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use)에 대해선 위키를 참조해주세요.
 
 ## `creat` Function
 
@@ -76,12 +75,13 @@ int creat(const char *path, mode_t mode);
 
 위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/creat.3p.html)입니다.
 
-
 `creat` 함수는 다음 호출과 동일합니다.
+
 ```C
 open(path, O_WRONLY | O_CREAT | O_TRUNC, mode)
 ```
-> 역사적으로 UNIX 시스템의 초기 버전에서는 새로운 파일을 생성하려면 `open`으로는 안되고 별개의 시스템 호출인 `creat` 가 필요했습니다. 
+
+> 역사적으로 UNIX 시스템의 초기 버전에서는 새로운 파일을 생성하려면 `open`으로는 안되고 별개의 시스템 호출인 `creat` 가 필요했습니다.
 > 현재는 `O_CREAT` 와 `O_TRUNC` 를 제공하므로 `creat`가 더이상 필요하지 않습니다.
 
 `creat` 함수의 단점은 파일을 오직 쓰기 전용으로만 열 수 있다는 점인데, 따라서 임시 파일을 생성해서 뭔가를 기록하고 다시 읽으려면 `creat` -> `close` -> `open` 순서로 호출해야 합니다. 더 나은 방법은 다음과 같이 `open` 을 써서 호출하는 것입니다.
@@ -93,6 +93,7 @@ open(path, O_RDWR | O_CREAT | O_TRUNC, mode)
 ## `close` Function
 
 열린 파일을 닫을 때 `close` 함수를 호출합니다.
+
 ```C
 #include <unistd.h>
 int close(int fd);
@@ -113,6 +114,7 @@ int close(int fd);
 이 오프셋은 `O_APPEND`가 아닌 경우에, 파일을 열었을때 **0**으로 초기화됩니다.
 
 `lseek` 함수는 열린 파일의 오프셋을 명시적으로 설정합니다.
+
 ```C
 #include <unistd.h>
 off_t lseek(int fd, off_t offset, int whence);
@@ -127,13 +129,15 @@ off_t lseek(int fd, off_t offset, int whence);
 2. *whence*가 `SEEK_CUR`이면 파일의 오프셋은 현재 오프셋 위치에서 **offset** 만큼 나아간 위치로 설정됩니다.
 3. *whence*가 `SEEK_END`이면 파일의 오프셋은 파일 맨 끝(파일 크기)에 **offset**을 더한 값으로 설정됩니다.
 
+### Example: Seeking File
 
-### Example: Seeking File 
 `lseek` 호출이 성공하면 새로운 파일 오프셋이 반환되므로, offset 파라미터를 0으로 설정하고 기준 위치를 현재 위치로(SEEK_CUR) 설정하면 현재 오프셋을 알아낼 수 있습니다.
+
 ```C
 off_t currpos;
 currpos = lseek(fd, 0, SEEK_CUR);
 ```
+
 위와 같이 실행했을때 off_t에 현재 파일 오프셋이 담기는데, 탐색을 지원하지 않는 파일(파이프, FIFO, 소켓 등등) 서술자에 대해서는 `lseek`는 **errno**를 `ESPIPE`로 설정하고 -1을 리턴합니다.
 
 보통 파일의 오프셋은 음이 아닌 정수이지만, 특정 장치에서는 현재 오프셋이 음의 정수일 수도 있습니다.
@@ -153,6 +157,7 @@ int main(void)
     exit(0);
 }
 ```
+
 <img src="./lseek_seeking_support.gif"/>
 <p style="text-align: center">실행 결과 </p>
 
@@ -206,12 +211,12 @@ int main(void)
 }
 
 ```
+
 <img src="./lseek_hole_file.gif"/>
 <p style="text-align: center">실행 결과 </p>
 
 `od` 커맨드는 파일을 바이트 단위로 읽고, `-c` 옵션을 주어서 문자로 표시하였습니다.
 위 실행 결과에서 파일 중간의 기록되지 않은 바이트들이 `/0`으로 읽혔음을 확인할 수 있습니다.
-
 
 <img src="./lseek_hole_compare.gif"/>
 <p style="text-align: center">실행 결과 </p>
@@ -234,24 +239,25 @@ ssize_t read(int fd, void *buf, size_t nbytes);
 위는 함수 원형이고, [명세](https://man7.org/linux/man-pages/man3/read.3p.html)입니다.
 
 다음과 같은 경우 실제로 읽어들인 바이트 수가 셋째 인수로 요청한 바이트 수보다 적을 수 있습니다.
+
 1. 정규 파일을 읽는데 요청된 바이트를 모두 읽기 전에 파일의 끝에 도착한 경우.
-    + 예를 들어 파일 끝까지 30바이트가 남았는데, 100바이트를 요청하면 `read`는 30을 리턴할 것입니다.
+   - 예를 들어 파일 끝까지 30바이트가 남았는데, 100바이트를 요청하면 `read`는 30을 리턴할 것입니다.
 2. 터미널 장치를 읽는 경우.
-    + 보통은 한번에 한 줄의 끝까지 읽게 됩니다.
+   - 보통은 한번에 한 줄의 끝까지 읽게 됩니다.
 3. 네트워크에서 자료를 읽을 때.
-    + 네트워크 안의 버퍼링 때문에 요청된 개수보다 적은 값이 반환될 수 있습니다.
+   - 네트워크 안의 버퍼링 때문에 요청된 개수보다 적은 값이 반환될 수 있습니다.
 4. 파이프나 FIFO를 읽을 때.
-    + 파이프에 담긴 바이트가 요청된 것보다 적으면 파이프에 담긴 바이트들만 읽습니다.
+   - 파이프에 담긴 바이트가 요청된 것보다 적으면 파이프에 담긴 바이트들만 읽습니다.
 5. 레코드 지향적 장치(record-oriented device)를 읽을 때.
-    + 자기 테이프 같은 일부 레코드 지향적 장치에서는 읽기 연산이 한번에 한 레코드만큼만 이루어집니다.
+   - 자기 테이프 같은 일부 레코드 지향적 장치에서는 읽기 연산이 한번에 한 레코드만큼만 이루어집니다.
 6. 읽기 연산 와중에 시그널에 의해 방해되었을때.
 
 읽기 연산은 파일의 현재 오프셋부터 시작하고, 읽기가 성공한 경우 실제로 읽은 바이트 수만큼 오프셋 값이 증가합니다.
 
-
 ## `write` 함수
 
 열린 파일에 자료를 기록할 때에는 `write`함수를 사용합니다.
+
 ```C
 #include <unistd.h>
 ssize_t write(int fd, const void *buf, size_t nbytes);
@@ -266,7 +272,6 @@ ssize_t write(int fd, const void *buf, size_t nbytes);
 파일에 대한 쓰기 연산은 현재 오프셋에서 시작합니다.
 단, 파일을 열 때 `O_APPEND` 옵션을 지정했다면 각 `write` 호출마다 먼저 파일 오프셋의 파일의 현재 끝으로 설정된 후 쓰기 연산을 합니다.
 쓰기 연산이 끝나면 기록된 바이트 수만큼 파일의 오프셋이 증가합니다.
-
 
 ## I/O Efficiency
 
@@ -314,11 +319,9 @@ int main(void)
 순차적인 읽기 연산을 감지하면, 시스템은 응용 프로그램이 곧 더 요청할 것이라고 예상하고 요청하는 것보다 더 많은 데이터를 읽어들입니다.
 이러한 미리 읽기 기법 덕분에, 32바이트처럼 작은 버퍼사이즈도 더 큰 버퍼사이즈의 경우 만큼이나 빠르게 읽습니다.
 
-
-
 ## Finish
 
-[다음 포스트](https://keisluvlog.netlify.app/unix_file_io_advance/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
+[다음 포스트](https://spongelog.netlify.app/unix_file_io_advance/)에서 파일의 공유와 원자적 연산, `dup`, `sync`, `fsync`, `fdatasync`, `fcntl`, `ioctl` 함수를 살펴보겠습니다.
 
 ### References
 

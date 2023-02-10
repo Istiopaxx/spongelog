@@ -1,8 +1,8 @@
 {
-  "name": "keisluvlog",
+  "name": "spongelog",
   "description": "purple flavored blog starter based on Gatsby",
   "version": "1.0.0",
-  "author": "KeisLuv5991",
+  "author": "Istiopaxx",
   "scripts": {
     "build": "gatsby clean && gatsby build && yarn copy",
     "dev": "gatsby clean && gatsby develop",

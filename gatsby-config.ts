@@ -1,4 +1,4 @@
-import siteMetadata from "./blog-config";
+import siteMetadata from './blog-config';
 
 interface FeedSerializeProps {
   query: {
@@ -152,8 +152,8 @@ export const plugins = [
   {
     resolve: 'gatsby-plugin-robots-txt',
     options: {
-      host: 'https://keisluvlog.netlify.app',
-      sitemap: 'https://keisluvlog.netlify.app/sitemap/sitemap-0.xml',
+      host: 'https://spongelog.netlify.app',
+      sitemap: 'https://spongelog.netlify.app/sitemap/sitemap-0.xml',
       policy: [{ userAgent: '*', allow: '/' }],
     },
   },
