@@ -101,7 +101,7 @@ export const globalStyles = globalCss({
       },
 
       'li::marker': {
-        fontSize: '1.25rem'
+        fontSize: '1.25rem',
       },
       li: {
         // marginTop: '0.5rem',

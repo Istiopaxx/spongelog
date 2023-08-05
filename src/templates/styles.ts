@@ -8,8 +8,8 @@ export const Article = styled('article', {
 
     svg: {
       fill: '$text500',
-    }
-  }
+    },
+  },
 });
 
 export const TableOfContents = styled('div', {
@@ -34,7 +34,7 @@ export const TableOfContents = styled('div', {
 
       a: {
         textDecoration: 'underline',
-      }
+      },
     },
   },
 });
@@ -88,6 +88,10 @@ export const Content = styled('section', {
     marginBottom: '1.5rem',
     fontSize: '1.5rem',
   },
+  h4: {
+    marginTop: '1.25rem',
+    fontSize: '1.25rem',
+  },
   a: {
     borderBottom: '1px solid $borderPrimary',
 
@@ -127,5 +131,5 @@ export const Footer = styled('footer', {
     transition: 'background-color $transitionDuration $transitionTiming',
 
     content: '',
-  }
+  },
 });
