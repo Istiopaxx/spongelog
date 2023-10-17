@@ -5,7 +5,7 @@
   "author": "Istiopaxx",
   "scripts": {
     "build": "gatsby clean && gatsby build && yarn copy",
-    "dev": "gatsby clean && gatsby develop",
+    "dev": "gatsby clean && gatsby develop -p 3000",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "lint:fix": "eslint --fix src",
