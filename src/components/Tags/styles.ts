@@ -1,7 +1,7 @@
 import { styled } from '~/stitches.config';
 
 export const TagList = styled('ul', {
-  margin: 0,
+  margin: '1rem 0',
 });
 
 export const Tag = styled('li', {

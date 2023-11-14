@@ -48,9 +48,9 @@ export const Title = styled('h1', {
 });
 
 export const ArticleMetadata = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  marginTop: '0.5rem',
+  // display: 'flex',
+  // alignItems: 'center',
+  marginTop: '1rem',
 
   color: '$text200',
 
