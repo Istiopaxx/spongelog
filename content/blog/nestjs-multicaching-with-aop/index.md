@@ -54,13 +54,13 @@ export class CacheModule extends ConfigurableModuleClass {
 }
 ```
 
-위 코드는 Cache Module의 소스코드인데, 등록된 프로바이더(즉 `CacheServie`)가 하나밖에 없습니다.
+위 코드는 Cache Module의 소스코드인데, 등록된 프로바이더(즉 `CacheManager`)가 하나밖에 없습니다.
 그래서 네스트 캐시 모듈과 제공되는 캐시 프로바이더를 활용하면 캐시 프로바이더를 하나밖에 쓰질 못하죠.
 
 ### 멀티 캐싱 기능의 계층 캐시 활용성 따운!
 
 네스트 캐시 모듈은 `cache-manager` 패키지에 대한 네스트 통합을 지원합니다.
-그리고 `cache-manager` 패키지는 멀티 캐시에 대한 기능이 포함되어 있죠.
+그리고 `cache-manager` 패키지는 멀티 캐시에 대한 기능<sup><a id="sup1" href="#footnote1">1</a></sup>이 포함되어 있죠.
 
 아래는 멀티 캐시에 대한 소스코드입니다.
 
@@ -214,7 +214,7 @@ class TestService {
 ```
 
 위 코드를 보면 메모리, 레디스 각각 캐시를 확인하고 없으면 제공된 함수를 실행하여 그 결과를 캐시에 씁니다.
-`getSomething` 함수는 메모리 캐시 - 레디스 캐시 순서대로 확인하고, 모두 없으면 DB까지 확인합니다.
+`getSomething` 함수<sup><a id="sup2" href="#footnote2">2</a></sup>는 메모리 캐시 - 레디스 캐시 순서대로 확인하고, 모두 없으면 DB까지 확인합니다.
 위에서 예시로 들었던 메모리 캐시 미스 - 레디스 캐시 히트 상황에서, 이 코드는 레디스 캐시 히트로 반환된 값을 `getOrSetFromMemory()` 메서드에서 캐시에 쓰기 때문에, 메모리 캐시에 쓰지 못하는 상황을 방지할 수 있습니다.
 
 근데 코드가 좀 더럽기도 하고, 이대로는 서비스 클래스에 함수가 한가득인데 일반화하기 어려울 것 같습니다.
@@ -302,35 +302,30 @@ export const Cacheable = (option: CacheOption) =>
 ```
 
 위 코드는 레디스 캐시 서비스와 레디스 캐시 데코레이터를 만들고, 레디스 캐시와 메모리 캐시를 계층적으로 활용하는 캐시 데코레이터를 만듭니다.
-이때 Nest에서 제공하는 `applyDecorators` 함수를 활용하여 데코레이터를 합성하는데, 이 함수는 `nest/common` 패키지에 있습니다.
+이때 Nest에서 제공하는 `applyDecorators` 함수를 활용하여 데코레이터를 합성하는데, 이 함수는 `@nestjs/common` 패키지에 있습니다.
 이때 계층적인 캐시 디자인을 구현하려면 `applyDecorators` 함수에 인자로 전달하는 데코레이터의 순서가 중요합니다.
-`applyDecorators`에 전달된 순서대로 데코레이터가 적용되기 때문이죠.
+우선 데코레이터들은 `applyDecorators`에 전달된 순서의 역순으로 데코레이터가 작성된다고 보면 됩니다.
 
 ```ts
-@Cacheable({
-  keyGenerator: (id: string) => `test:${id}`,
-})
+@Cacheable()
 async getSomething(id: string) {
   return await this.testRepository.findOne(id);
 }
 
-@RedisCacheable({
-  keyGenerator: (id: string) => `test:${id}`,
-})
-@MemoryCacheable({
-  keyGenerator: (id: string) => `test:${id}`,
-})
+
+@MemoryCacheable()
+@RedisCacheable()
 async getSomething2(id: string) {
   return await this.testRepository.findOne(id);
 }
 ```
 
 위 코드에서, `getSomething`함수에 결과적으로 적용된 데코레이터는 `getSomething2` 함수에 적용된 데코레이터와 순서가 같습니다.
-왜 위와 같이 데코레이터를 적용해야 할까요?
+왜 계층적인 캐시 디자인을 위해 위와 같이 데코레이터를 적용해야 할까요?
 
-이는 데코레이터를 코드에 작성하는 순서와 "호출"되는 순서는 반대이기 때문입니다.
-데코레이터가 여러 개가 있다면, 수학의 함수가 합성되는 것처럼, (Redis ∘ Memory)(getSomething2))으로 실행됩니다.
-즉, 위 코드에서 `getSomething2` 함수에 적용된 데코레이터는 `RedisCacheable(MemoryCacheable(getSomething2))` 로 실행됩니다.
+이는 데코레이터가 여러 개 적용되었을 때 데코레이터를 코드에 작성하는 순서대로 합성되기 때문입니다.
+데코레이터가 여러 개가 있다면, 수학의 함수가 합성되는 것처럼, (Memory ∘ Redis)(getSomething2))으로 합성됩니다.
+즉, 위 코드에서 `getSomething2` 함수에 적용된 데코레이터는 `getSomething2(id)`를 실행할 때 `MemoryCacheable(RedisCacheable(getSomething2))(id)` 로 적용되어 실행됩니다. 이런 순서로 실행되어야, 메모리 - 레디스 - DB(원래 함수 로직) 순서로 실행되게 됩니다.
 
 이는 [TS Decorator 합성 문서](https://www.typescriptlang.org/docs/handbook/decorators.html#decorator-composition)에 잘 설명되어 있으니 참고해보세요.
 
@@ -395,3 +390,17 @@ Nodejs는 싱글 스레드로 동작하고, 싱글 스레드로 동작하는 프
 그래도 많이 찾아보며 캐싱 기술과 네스트에 대해 더 자세히 알아보는 좋은 시간이 되었습니다.
 모든 코드 예시는 이해를 돕기 위하여 제가 실제로 쓰는 코드에서 많이 생략하였습니다.
 여러분도 NestJS와 행복 캐싱하세요!! 커스텀하는 법 어렵지 않습니다~~
+
+## Reference
+
+- [Nestjs caching 문서](https://docs.nestjs.com/techniques/caching)
+- [cache-manager 패키지](https://www.npmjs.com/package/cache-manager)
+- [nestjs-aop 패키지](https://github.com/toss/nestjs-aop)
+- [TS Decorator 함수 합성](https://www.typescriptlang.org/docs/handbook/decorators.html#decorator-composition)
+- [applyDecorators 소스 코드](https://github.com/nestjs/nest/blob/master/packages/common/decorators/core/apply-decorators.ts)
+
+## Footnote
+
+<a id="footnote1" href="#sup1">1</a>: 이 기능은 23.11월 기준 문서화되어 있지도 타입 정보에 명시되어 있지도 않습니다. [관련된 이슈](https://github.com/nestjs/cache-manager/issues/174)도 있는데, 멀티 캐시를 활용하는 사람이 적은지 고쳐지진 않고 있습니다. 저는 내부에서 사용하는 `cache-manager` multicaching의 로직이 마음에 안들어서 딱히 사용하지는 않습니다.
+
+<a id="footnote2" href="#sup2">2</a>: 이 함수엔 캐시 미스 시에 실행되어 결과값을 얻을 함수를 콜백 인자로 넘겨줍니다. 이때 콜백 인자로 넘겨주는 함수를 `this.getOrSetFromRedis(id, this.getSomethingFromDB)` 처럼 함수 자체를 넘기지 않고 `this.getOrSetFromRedis(id, () => this.getSomethingFromDB(id))` 처럼 화살표 함수로 넘겨줍니다. 이것은 `this.getSomethingFromDB` 함수 내부에서 사용할 `this` 바인딩이 `TestService`이어야 하기 때문에 그렇습니다. 자세한 것은 [JS this 바인딩](https://ko.javascript.info/object-methods#ref-648)을 참고하세요.
