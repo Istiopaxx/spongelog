@@ -60,7 +60,9 @@ export class CacheModule extends ConfigurableModuleClass {
 ### 멀티 캐싱 기능의 계층 캐시 활용성 따운!
 
 네스트 캐시 모듈은 `cache-manager` 패키지에 대한 네스트 통합을 지원합니다.
-그리고 `cache-manager` 패키지는 멀티 캐시에 대한 기능<sup><a id="sup1" href="#footnote1">1</a></sup>이 포함되어 있죠.
+그리고 `cache-manager` 패키지는 멀티 캐시에 대한 기능이 포함되어 있죠.
+네스트 캐시 모듈도 `cache-manager` 패키지의 멀티 캐싱 스토어 기능을 제공<sup><a id="sup1" href="#footnote1">1</a></sup>
+합니다.
 
 아래는 멀티 캐시에 대한 소스코드입니다.
 
