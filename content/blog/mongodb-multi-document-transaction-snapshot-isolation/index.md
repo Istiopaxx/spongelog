@@ -42,8 +42,8 @@ NoSQL과 비교해서 전통적인 SQL DB들이 가지는 장점은 많은 것�
 
 <img src="./transaction-conflict.svg"/>
 
-트랜잭션 B는 시작한 후 Document#1을 업데이트합니다.
-트랜잭션 A는 트랜잭션 B가 Document#1을 업데이트를 완료한 후 Document#1을 업데이트하려고 합니다.
+트랜잭션 B는 시작한 후 `Document#1`을 업데이트합니다.
+트랜잭션 A는 트랜잭션 B가 `Document#1`을 업데이트를 완료한 후 `Document#1`을 업데이트하려고 합니다.
 
 이때 트랜잭션 A는 업데이트하려 할 때 `Write Conflict Error`를 만나서 업데이트를 하지 못하고,트랜잭션 A는 중단되고 롤백됩니다.
 이는 [MongoDB Docs](https://www.mongodb.com/docs/manual/core/transactions-production-consideration/#in-progress-transactions-and-write-conflicts)에도 설명되어 있습니다.
@@ -69,7 +69,7 @@ WiredTiger는 트랜잭션이 시작할 때 스냅샷을 설정합니다.
 ### 스냅샷의 구성요소와 생성 방법
 
 먼저 알아야 할 것은, 트랜잭션은 모두 번호가 붙혀집니다.
-그 번호는 WiredTiger의 Global Transaction ID Counter를 이용하여 붙혀지는데, 트랜잭션이 생성될 때마다 카운터가 1 올라가고 트랜잭션 번호로 카운터 값이 할당되게 됩니다.
+그 번호는 WiredTiger의 Global Transaction ID Counter를 이용하여 붙혀지는데, 트랜잭션 번호로 카운터 값이 할당되게 됩니다.
 그리고 다큐먼트는 변경 이력을 업데이트 리스트로 관리하는데, 각각의 변경 이력은 그것을 변경한 트랜잭션 번호가 매겨집니다.
 <br/><br/>
 <img src="./document-tx-num.svg"/>
@@ -106,12 +106,14 @@ WiredTiger는 트랜잭션이 시작할 때 스냅샷을 설정합니다.
 <img src="./transaction-snapshot.svg"/>
 <br/>
 
-새로운 트랜잭션의 ID엔 글로벌 트랜잭션 ID 카운터인 8이 들어가고, 동시 트랜잭션 ID엔 3, 5, 7이 할당되고, 최대 트랜잭션 ID엔 [카운터+1] 인 9가 들어가고, 최소 트랜잭션 ID엔 3이 들어가게 됩니다.
+새로운 트랜잭션의 ID엔 글로벌 트랜잭션 ID 카운터인 8이 들어가고, 동시 트랜잭션 ID엔 3, 5, 7이 할당되고, 최대 트랜잭션 ID엔 9가 들어가고, 최소 트랜잭션 ID엔 3이 들어가게 됩니다.
+
+> 카운터에 대한 부분은 오류가 있을 수 있습니다. 정확한 정보는 WiredTiger 소스코드를 참고하세요.
 
 ### 쓰기 연산과 낙관적 동시성 제어
 
 트랜잭션 내부의 쓰기 연산이 적용될 다큐먼트가 트랜잭션 시작 시 스냅샷이 설정된 후로 수정이 되어있다고 가정해봅시다.
-이때 WiredTiger는 트랜잭션 **외부**의 쓰기 연산과 트랜잭션 **내부**의 쓰기 연산이 같은 다큐먼트를 수정하는 것을 확인하고, Write Conflict Error를 발생시킵니다.
+이때 WiredTiger는 트랜잭션 **외부**의 쓰기 연산과 트랜잭션 **내부**의 쓰기 연산이 같은 다큐먼트를 수정하는 것을 확인하고, `Write Conflict Error`를 발생시킵니다.
 
 이때, 쓰기 연산이 적용될 다큐먼트가 스냅샷이 설정된 후로 수정이 되었는지의 여부는 변경 이력과 스냅샷을 이용하여 판단합니다.
 우선, 각 변경 이력이 현재 트랜잭션에서 읽을 수 있는지 여부, 다시말해 현재 트랜잭션에서의 visibility를 확인합니다.
@@ -139,11 +141,11 @@ else:
 <img src="./transaction-snapshot-conflict.svg"/>
 <br/>
 
-위 그림을 보면, TXID#8은 Doc#1을 업데이트(쓰기) 연산을 실행할 때 Doc#1의 가장 최근 변경 이력을 확인합니다.
-Doc#1(Ver.2)가 가장 최근 변경 이력이고, TXID#7에 의해 변경되었음을 확인할 수 있습니다.
-TXID#7은 스냅샷의 동시 트랜잭션 ID 목록에 있으므로, non-visible한 변경 이력으로 판단합니다.
+위 그림을 보면, `TXID#8`은 `Doc#1`을 업데이트(쓰기) 연산을 실행할 때 `Doc#1`의 가장 최근 변경 이력을 확인합니다.
+`Doc#1(Ver.2)`가 가장 최근 변경 이력이고, `TXID#7`에 의해 변경되었음을 확인할 수 있습니다.
+`TXID#7`은 스냅샷의 동시 트랜잭션 ID 목록에 있으므로, non-visible한 변경 이력으로 판단합니다.
 
-따라서 TXID#8은 Write Conflict Error를 감지하게 되고, 자동으로 롤백됩니다.
+따라서 `TXID#8`은 Write Conflict Error를 감지하게 되고, 자동으로 롤백됩니다.
 다큐먼트의 버전을 확인하여 이미 수정되지 않은 경우에만 수정하는 테크닉은 [낙관적 동시성 제어](https://en.wikipedia.org/wiki/Optimistic_concurrency_control)를 활용하는 것입니다.
 
 ### MongoDB Transaction/Operation의 충돌 차이
@@ -180,14 +182,14 @@ MongoDB에는 두 가지 종류의 연산이 있습니다.
 <img src="./write-retry.svg"/>
 <br/>
 
-TX#2는 쓰기 충돌 에러로 Doc#1 업데이트 연산을 한 즉시 트랜잭션이 Abort(Rollback)됩니다.
-그 후 TX#1이 커밋을 한 후, TX#2를 재시도하여 TX#3가 새로 시작되었습니다.
-이제 TX#3는 Doc#1 업데이트를 성공적으로 수행하고 커밋까지 완료할 수 있습니다.
+`TX#2`는 쓰기 충돌 에러로 `Doc#1` 업데이트 연산을 한 즉시 트랜잭션이 Abort(Rollback)됩니다.
+그 후 `TX#1`이 커밋을 한 후, `TX#2`를 재시도하여 `TX#3`가 새로 시작되었습니다.
+이제 `TX#3`는 `Doc#1` 업데이트를 성공적으로 수행하고 커밋까지 완료할 수 있습니다.
 
-만약, TX#1이 커밋하기 전에 TX#3가 시작되면 어떤 일이 벌어질까요?
+만약, `TX#1`이 커밋하기 전에 `TX#3`가 시작되면 어떤 일이 벌어질까요?
 
-TX#3는 트랜잭션 시작 시점에 스냅샷을 설정하며, 이때 동시 트랜잭션 ID에 TX#1이 등록되게 됩니다.
-그리고 Doc#1을 업데이트 할 때, 바로 위 상황처럼 가장 최근 변경 이력의 visibility를 확인하고, 가장 최근 변경 이력의 트랜잭션 ID인 TX#1이 스냅샷의 동시 트랜잭션 ID에 있으므로 non-visible로 판단하고 다시 Write Conflict를 발생시키게 됩니다.
+`TX#3`는 트랜잭션 시작 시점에 스냅샷을 설정하며, 이때 동시 트랜잭션 ID에 `TX#1`이 등록되게 됩니다.
+그리고 `Doc#1`을 업데이트 할 때, 바로 위 상황처럼 가장 최근 변경 이력의 visibility를 확인하고, 가장 최근 변경 이력의 트랜잭션 ID인 `TX#1`이 스냅샷의 동시 트랜잭션 ID에 있으므로 non-visible로 판단하고 다시 Write Conflict를 발생시키게 됩니다.
 
 따라서 재시도를 하는 것은 해당 다큐먼트를 수정한 트랜잭션이 커밋되고 난 후 시도를 해야 다시 Write Conflict 에러가 나지 않습니다.
 
